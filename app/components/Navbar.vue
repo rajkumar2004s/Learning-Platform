@@ -177,7 +177,15 @@
       >
         Admin
       </NuxtLink>
-
+      <NuxtLink
+        v-if="auth.user && auth.user.role === 'admin'"
+        to="/profile"
+        class="block px-3 py-2 rounded-md"
+        :class="isActive('/profile') ? 'bg-blue-700' : 'hover:bg-gray-700'"
+        @click="isOpen = false"
+      >
+        Profile
+      </NuxtLink>
       <div class="flex items-center gap-3 mt-3">
         <img
           :src="'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80'"
@@ -227,5 +235,6 @@ const navLinks = [
   { path: "/cart", label: "Cart" },
   { path: "/wishlist", label: "Wishlist" },
   { path: "/aboutus", label: "About Us" },
+  { path: "/chatbot", label: "Ai Assistant" },
 ];
 </script>
