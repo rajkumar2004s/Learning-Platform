@@ -12,9 +12,7 @@ export default defineNuxtRouteMiddleware(
     const requiresAuth = !!to.meta?.requiresAuth;
     const requiresAdmin = !!to.meta?.requiresAdmin;
 
-    // Only redirect to login if the page explicitly requires auth and user is not authenticated
     if (requiresAuth && !auth.isAuthenticated) {
-      // Store the intended destination for redirect after login
       if (to.path !== "/login") {
         return navigateTo(`/login?redirect=${encodeURIComponent(to.fullPath)}`);
       }

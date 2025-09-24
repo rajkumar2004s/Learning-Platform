@@ -6,7 +6,6 @@ import type { Course } from "@/types/Course";
 export const useWishlistStore = defineStore("wishlist", () => {
   const wishlist = ref<Course[]>([]);
 
-  // ✅ Safe load (client only)
   const loadWishlist = () => {
     if (process.client) {
       try {
@@ -19,7 +18,6 @@ export const useWishlistStore = defineStore("wishlist", () => {
     }
   };
 
-  // ✅ Auto-persist (client only)
   if (process.client) {
     watch(
       wishlist,
@@ -57,6 +55,6 @@ export const useWishlistStore = defineStore("wishlist", () => {
     removeFromWishlist,
     toggleWishlist,
     isInWishlist,
-    loadWishlist, // ✅ expose loadWishlist
+    loadWishlist,
   };
 });

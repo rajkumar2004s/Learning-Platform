@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
     console.log("Create order request:", { amount, currency });
 
     const options = {
-      amount: Math.round(amount * 100), // Ensure amount is in paise and is an integer
+      amount: Math.round(amount * 100),
       currency,
       receipt: `order_${Date.now()}`,
     };

@@ -2,9 +2,7 @@
   <div
     class="flex min-h-screen bg-[#1f1f1f] text-[#e3e3e3] w-[100vw] md:w-[83.4vw] pt-24 md:pt-0"
   >
-    <!-- Main Content -->
     <div class="flex-1 flex flex-col">
-      <!-- Header -->
       <header
         class="flex justify-between items-center px-6 py-4 border-b border-[#333]"
       >
@@ -16,11 +14,9 @@
         </div>
       </header>
 
-      <!-- Chat Area -->
       <main
         class="flex-1 flex flex-col items-center justify-center px-6 relative"
       >
-        <!-- Welcome -->
         <div v-if="!hasMessages" class="text-5xl font-light text-center mb-12">
           <div v-if="auth.user" class="text-white font-bold pr-2 pt-3">
             <h1 class="text-white font-bold">
@@ -29,7 +25,6 @@
           </div>
         </div>
 
-        <!-- Messages -->
         <div
           v-else
           ref="messagesContainer"
@@ -41,7 +36,6 @@
             class="flex gap-3"
             :class="{ 'justify-end': msg.sender === 'user' }"
           >
-            <!-- Assistant Avatar -->
             <div
               v-if="msg.sender === 'assistant'"
               class="w-8 h-8 bg-gradient-to-br from-[#4285f4] to-[#9c27b0] rounded-full flex items-center justify-center flex-shrink-0"
@@ -49,7 +43,6 @@
               <i class="fas fa-star text-white text-sm"></i>
             </div>
 
-            <!-- Message Bubble -->
             <div
               class="max-w-[80%] px-4 py-3 rounded-2xl leading-relaxed"
               :class="
@@ -62,7 +55,6 @@
             </div>
           </div>
 
-          <!-- Loader Bubble -->
           <div v-if="isLoading" class="flex gap-3">
             <div
               class="w-8 h-8 bg-gradient-to-br from-[#4285f4] to-[#9c27b0] rounded-full flex items-center justify-center flex-shrink-0"
@@ -79,19 +71,16 @@
           </div>
         </div>
 
-        <!-- Input -->
         <div class="w-full max-w-3xl absolute bottom-6 mt-26 px-8 md:px-0">
           <div
             class="bg-[#2d2d2d] border border-[#333] rounded-3xl p-4 flex items-center gap-4 focus-within:border-[#4285f4] transition-colors"
           >
-            <!-- Plus Button -->
             <button
               class="text-[#9aa0a6] hover:bg-[#333] p-2 rounded-full transition-colors"
             >
               <i class="fas fa-plus"></i>
             </button>
 
-            <!-- Textarea -->
             <textarea
               ref="textareaRef"
               v-model="inputText"
@@ -102,7 +91,6 @@
               class="flex-1 bg-transparent border-none outline-none text-[#e3e3e3] placeholder-[#9aa0a6] resize-none max-h-32"
             ></textarea>
 
-            <!-- Tools + Mic -->
             <div class="flex items-center gap-3">
               <div
                 class="flex items-center gap-2 text-[#9aa0a6] cursor-pointer hover:bg-[#333] px-3 py-2 rounded-2xl transition-colors"
@@ -158,9 +146,6 @@ interface Conversation {
   lastActivity: Date;
 }
 
-// -------------------------
-// State
-// -------------------------
 const conversations = ref<Conversation[]>([]);
 const currentConversationId = ref<string | null>(null);
 const inputText = ref("");
@@ -168,9 +153,6 @@ const textareaRef = ref<HTMLTextAreaElement>();
 const messagesContainer = ref<HTMLElement>();
 const isLoading = ref(false);
 
-// -------------------------
-// Computed
-// -------------------------
 const currentMessages = computed(() => {
   return (
     conversations.value.find((c) => c.id === currentConversationId.value)
@@ -180,9 +162,6 @@ const currentMessages = computed(() => {
 
 const hasMessages = computed(() => currentMessages.value.length > 0);
 
-// -------------------------
-// Methods
-// -------------------------
 const handleKeyDown = (e: KeyboardEvent) => {
   if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
@@ -194,7 +173,6 @@ const sendMessage = async () => {
   const text = inputText.value.trim();
   if (!text) return;
 
-  // Create new conversation if none exists
   if (!currentConversationId.value) {
     const newConversation: Conversation = {
       id: Date.now().toString(),
@@ -211,7 +189,6 @@ const sendMessage = async () => {
   );
   if (!conversation) return;
 
-  // Add user message
   conversation.messages.push({
     id: Date.now().toString(),
     text,
@@ -224,9 +201,6 @@ const sendMessage = async () => {
   resetHeight();
   await scrollToBottom();
 
-  // -------------------------
-  // Gemini API Call
-  // -------------------------
   try {
     isLoading.value = true;
     const response = await $fetch<{ reply: string }>("/api/chat", {

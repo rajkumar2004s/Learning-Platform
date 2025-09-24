@@ -14,31 +14,28 @@ export default defineEventHandler(async (event) => {
     adminSecret?: string;
   }>(event);
 
-  // Validate input
   if (!body.name || !body.email || !body.password) {
     throw createError({
       statusCode: 400,
-      message: "Name, email, and password are required"
+      message: "Name, email, and password are required",
     });
   }
 
   if (body.password.length < 6) {
     throw createError({
       statusCode: 400,
-      message: "Password must be at least 6 characters long"
+      message: "Password must be at least 6 characters long",
     });
   }
 
-  // Basic email validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(body.email)) {
     throw createError({
       statusCode: 400,
-      message: "Invalid email format"
+      message: "Invalid email format",
     });
   }
 
-  // ensure file exists
   try {
     await fs.access(USERS_FILE);
   } catch {
@@ -53,7 +50,7 @@ export default defineEventHandler(async (event) => {
     console.error("Error parsing users file:", error);
     throw createError({
       statusCode: 500,
-      message: "Internal server error"
+      message: "Internal server error",
     });
   }
 
@@ -61,11 +58,10 @@ export default defineEventHandler(async (event) => {
     console.log(`Registration attempt for existing email: ${body.email}`);
     throw createError({
       statusCode: 400,
-      message: "Email already exists"
+      message: "Email already exists",
     });
   }
 
-  // Save plain text password directly (insecure)
   const hashedPassword = body.password;
 
   const role: User["role"] =
@@ -89,12 +85,11 @@ export default defineEventHandler(async (event) => {
     console.error("Error writing users file:", error);
     throw createError({
       statusCode: 500,
-      message: "Internal server error"
+      message: "Internal server error",
     });
   }
 
   console.log(`New user registered: ${body.email} (role: ${role})`);
 
-  // return safe user
   return { id: newUser.id, name: newUser.name, email: newUser.email, role };
 });

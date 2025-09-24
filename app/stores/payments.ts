@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
-import type { Course } from "@/types/Course"; // ✅ correct path
-import { useEnrolledCourseStore } from "@/stores/enrolledCourses"; // ✅ correct path
+import type { Course } from "@/types/Course";
+import { useEnrolledCourseStore } from "@/stores/enrolledCourses";
 
 export interface Payment {
   id: string;
@@ -15,9 +15,6 @@ export const usePaymentStore = defineStore("payment", () => {
   const payments = ref<Payment[]>([]);
   const currentPayment = ref<Payment | null>(null);
 
-  // --------------------------
-  // Load payments from localStorage
-  // --------------------------
   if (typeof window !== "undefined") {
     const saved = localStorage.getItem("payments");
     if (saved) payments.value = JSON.parse(saved);
@@ -29,9 +26,6 @@ export const usePaymentStore = defineStore("payment", () => {
     );
   }
 
-  // --------------------------
-  // Payment actions
-  // --------------------------
   const startPayment = (course: Course) => {
     const payment: Payment = {
       id: crypto.randomUUID(),
@@ -51,7 +45,7 @@ export const usePaymentStore = defineStore("payment", () => {
     currentPayment.value.status = "completed";
 
     const enrolledStore = useEnrolledCourseStore();
-    await enrolledStore.enrollCourse(course); // ✅ persists to enrolledCourses.json
+    await enrolledStore.enrollCourse(course);
 
     currentPayment.value = null;
   };

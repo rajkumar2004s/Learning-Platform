@@ -9,7 +9,6 @@ export default defineEventHandler(async (event) => {
 
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = body;
 
-    // More detailed validation
     if (!razorpay_order_id) {
       console.error("Missing razorpay_order_id");
       return {
@@ -34,7 +33,6 @@ export default defineEventHandler(async (event) => {
       };
     }
 
-    // Verify payment signature
     const secret = "EYg9qRrApT7g1j5AL4CtVsIM";
     const generated_signature = crypto
       .createHmac("sha256", secret)

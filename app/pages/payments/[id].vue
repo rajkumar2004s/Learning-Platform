@@ -5,17 +5,14 @@
     <div
       class="bg-white shadow-2xl rounded-3xl p-12 w-full max-w-5xl animate_animated animate_fadeInUp"
     >
-      <!-- Loading State -->
       <div v-if="loading" class="flex items-center justify-center py-12">
         <div
           class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"
         ></div>
       </div>
 
-      <!-- Course Details -->
       <div v-else-if="course" class="space-y-8">
-        <!-- Course Summary -->
-        <div class="flex flex-col md:flex md:flex-row  items-center gap-8 mb-10">
+        <div class="flex flex-col md:flex md:flex-row items-center gap-8 mb-10">
           <img
             :src="course.imgUrl"
             :alt="course.title"
@@ -29,7 +26,6 @@
             </p>
           </div>
 
-          <!-- Payment Method Selector (small, right side) -->
           <div class="md:w-40 w-full">
             <label class="block text-gray-700 font-medium mb-2 text-sm">
               Payment Methods
@@ -40,7 +36,6 @@
           </div>
         </div>
 
-        <!-- Payment Form -->
         <h3 class="text-2xl font-semibold mb-4">Payment Details</h3>
         <div class="space-y-6">
           <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
@@ -48,7 +43,6 @@
             <p class="text-gray-600">UPI ID: user@razorpay</p>
           </div>
 
-          <!-- Submit Button -->
           <button
             type="button"
             @click="startPayment"
@@ -106,7 +100,6 @@ const enrolledCourseStore = useEnrolledCourseStore();
 const course = ref<Course | null>(null);
 const loading = ref(true);
 
-// Initialize course data
 onMounted(async () => {
   try {
     loading.value = true;
@@ -115,7 +108,6 @@ onMounted(async () => {
       throw new Error("Course ID is required");
     }
 
-    // Find the course
     const foundCourse = courseStore.courses.find((c) => c.id === courseId);
     if (!foundCourse) {
       throw new Error("Course not found");
@@ -140,14 +132,13 @@ const startPayment = async () => {
       throw new Error("Razorpay SDK not loaded");
     }
 
-    // Create order on server
     const response = await fetch("/api/payments/create-order", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        amount: course.value.price, // Send the amount as is, let server handle conversion
+        amount: course.value.price,
         currency: "INR",
       }),
     });
@@ -159,7 +150,6 @@ const startPayment = async () => {
     const order = await response.json();
     console.log("Created order:", order);
 
-    // Initialize payment options
     const options = {
       key: "rzp_test_RHofjnm5xuFy05",
       amount: order.amount,
@@ -172,7 +162,6 @@ const startPayment = async () => {
           console.log("Razorpay payment response:", response);
           console.log("Response keys:", Object.keys(response));
 
-          // Extract payment details with fallback for different response structures
           const paymentData = {
             razorpay_order_id: response.razorpay_order_id || response.order_id,
             razorpay_payment_id:
@@ -183,7 +172,6 @@ const startPayment = async () => {
 
           console.log("Extracted payment data:", paymentData);
 
-          // Validate required fields
           if (
             !paymentData.razorpay_order_id ||
             !paymentData.razorpay_payment_id ||
@@ -199,7 +187,6 @@ const startPayment = async () => {
             );
           }
 
-          // Verify payment
           const verifyResponse = await fetch("/api/payments/verify", {
             method: "POST",
             headers: {
@@ -221,7 +208,6 @@ const startPayment = async () => {
             throw new Error("Course not found");
           }
 
-          // Add required fields if missing
           const courseToEnroll = {
             ...course.value,
             mrp: course.value.mrp || course.value.price,
@@ -233,10 +219,8 @@ const startPayment = async () => {
           console.log("Enrolling course:", courseToEnroll);
           await enrolledCourseStore.enrollCourse(courseToEnroll);
 
-          // Force refresh to ensure the course is properly loaded
           await enrolledCourseStore.fetchEnrolledCourses();
 
-          // Verify enrollment worked
           const isEnrolled = enrolledCourseStore.isEnrolled(course.value.id);
           console.log("Enrollment verification:", isEnrolled);
 
@@ -262,11 +246,11 @@ const startPayment = async () => {
         }
       },
       prefill: {
-        email: "", // Add user's email here if available
-        contact: "", // Add user's phone if available
+        email: "",
+        contact: "",
       },
       theme: {
-        color: "#2563eb", // Blue-600 to match your UI
+        color: "#2563eb",
       },
       modal: {
         ondismiss: function () {

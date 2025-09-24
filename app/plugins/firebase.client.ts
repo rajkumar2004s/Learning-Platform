@@ -20,38 +20,29 @@ const firebaseConfig = {
 };
 
 export default defineNuxtPlugin((nuxtApp) => {
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const googleProvider = new GoogleAuthProvider();
 
-  // Add custom parameters to the Google provider
   googleProvider.setCustomParameters({
     prompt: "select_account",
   });
 
-  // Create composable state for user
   const user = useState<User | null>("firebase-user", () => null);
 
-  // Set up auth state listener
   auth.onAuthStateChanged((newUser) => {
     user.value = newUser;
-    // Don't automatically navigate - let the normal routing handle navigation
   });
 
-  // Handle Google Sign In
   const signInWithGoogle = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      // Don't automatically navigate - let the auth store handle navigation
       return { user: result.user, error: null };
     } catch (error: any) {
-      // If popup is blocked, fall back to redirect
       if (error.code === "auth/popup-blocked") {
         try {
           await signInWithRedirect(auth, googleProvider);
           const result = await getRedirectResult(auth);
-          // Don't automatically navigate - let the auth store handle navigation
           return { user: result?.user || null, error: null };
         } catch (redirectError: any) {
           return { user: null, error: redirectError.message };
@@ -61,7 +52,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
   };
 
-  // Sign out function
   const signOut = async () => {
     try {
       await auth.signOut();

@@ -6,9 +6,6 @@ import { useAuthStore } from "./auth";
 export const useEnrolledCourseStore = defineStore("enrolledCourses", () => {
   const enrolledCourses = ref<Course[]>([]);
 
-  // --------------------------
-  // Load from localStorage (persist on refresh)
-  // --------------------------
   if (typeof window !== "undefined") {
     const saved = localStorage.getItem("enrolledCourses");
     if (saved) enrolledCourses.value = JSON.parse(saved);
@@ -20,9 +17,6 @@ export const useEnrolledCourseStore = defineStore("enrolledCourses", () => {
     );
   }
 
-  // --------------------------
-  // Fetch from API
-  // --------------------------
   const fetchEnrolledCourses = async () => {
     try {
       const data = await $fetch<Course[]>("/api/enrolledCourses");
@@ -32,9 +26,6 @@ export const useEnrolledCourseStore = defineStore("enrolledCourses", () => {
     }
   };
 
-  // --------------------------
-  // Enroll a course
-  // --------------------------
   const enrollCourse = async (course: Course) => {
     try {
       const auth = useAuthStore();
@@ -54,9 +45,6 @@ export const useEnrolledCourseStore = defineStore("enrolledCourses", () => {
     }
   };
 
-  // --------------------------
-  // Remove a course
-  // --------------------------
   const removeCourse = async (courseId: string) => {
     try {
       const auth = useAuthStore();
@@ -75,9 +63,6 @@ export const useEnrolledCourseStore = defineStore("enrolledCourses", () => {
     }
   };
 
-  // --------------------------
-  // Helpers
-  // --------------------------
   const isEnrolled = (courseId: string) =>
     enrolledCourses.value.some((c) => c.id === courseId);
 

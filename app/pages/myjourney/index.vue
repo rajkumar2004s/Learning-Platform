@@ -9,6 +9,4 @@
 definePageMeta({
   requiresAuth: true,
 });
-
-// Later, you can replace the static content with real data from your API.
 </script>

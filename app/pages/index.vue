@@ -1,21 +1,17 @@
 <template>
   <div class="pt-12 md:pt-0">
-    <!-- Home -->
     <transition name="fade-up">
       <Home v-if="show.home" />
     </transition>
 
-    <!-- Rewards -->
     <transition name="fade-up">
       <Rewards v-if="show.rewards" />
     </transition>
 
-    <!-- Testimonials -->
     <transition name="fade-up">
       <Testimonials v-if="show.testimonials" />
     </transition>
 
-    <!-- Footer -->
     <transition name="fade-up">
       <FooterHome v-if="show.footer" />
     </transition>
@@ -35,10 +31,10 @@ const show = ref({
 });
 
 onMounted(() => {
-  setTimeout(() => (show.value.home = true), 200); // after 1s
-  setTimeout(() => (show.value.rewards = true), 500); // after 2s
-  setTimeout(() => (show.value.testimonials = true), 800); // after 3s
-  setTimeout(() => (show.value.footer = true), 600); // after 4s
+  setTimeout(() => (show.value.home = true), 200);
+  setTimeout(() => (show.value.rewards = true), 500);
+  setTimeout(() => (show.value.testimonials = true), 800);
+  setTimeout(() => (show.value.footer = true), 600);
 });
 </script>
 

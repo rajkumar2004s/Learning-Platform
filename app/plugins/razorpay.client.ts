@@ -7,7 +7,6 @@ declare global {
 }
 
 export default defineNuxtPlugin((nuxtApp) => {
-  // Load Razorpay SDK
   if (process.client) {
     const script = document.createElement("script");
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
@@ -43,8 +42,8 @@ export default defineNuxtPlugin((nuxtApp) => {
                 });
               },
               prefill: {
-                email: options.email || "", // Pass from caller if available
-                name: options.name || "", // Pass from caller if available
+                email: options.email || "",
+                name: options.name || "",
               },
               theme: {
                 color: "#2f76e8",
@@ -55,7 +54,6 @@ export default defineNuxtPlugin((nuxtApp) => {
                 },
               },
             });
-            // Ensure Razorpay SDK is loaded before opening
             if (typeof window.Razorpay === "undefined") {
               const sdkScript = document.querySelector(
                 'script[src="https://checkout.razorpay.com/v1/checkout.js"]'

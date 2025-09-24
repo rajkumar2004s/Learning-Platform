@@ -1,9 +1,8 @@
-// types/User.ts
 export interface User {
   id: string;
   name: string;
   email: string;
-  role: "user" | "admin"; // 👈 new
+  role: "user" | "admin";
   token?: string;
   photoURL?: string;
 }

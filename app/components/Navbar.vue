@@ -196,9 +196,6 @@
           <h1 class="text-white font-bold">
             {{ (user.displayName || user.name)?.split(" ")[0] }}
           </h1>
-          <!-- <p class="text-gray-400 text-sm truncate">
-            {{ user.displayName }}@gmail.com
-          </p> -->
         </div>
         <NuxtLink to="/login" @click="isOpen = false">
           <i class="fa-solid fa-right-from-bracket text-2xl"></i>
@@ -236,5 +233,6 @@ const navLinks = [
   { path: "/wishlist", label: "Wishlist" },
   { path: "/aboutus", label: "About Us" },
   { path: "/chatbot", label: "Ai Assistant" },
+  { path: "/profile", label: "Profile" },
 ];
 </script>

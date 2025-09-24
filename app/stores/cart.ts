@@ -1,4 +1,3 @@
-// stores/cart.ts
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
 import type { Course } from "@/types/Course";
@@ -6,7 +5,6 @@ import type { Course } from "@/types/Course";
 export const useCartStore = defineStore("cart", () => {
   const cart = ref<Course[]>([]);
 
-  // ✅ Safe load from localStorage (only client-side)
   const loadCart = () => {
     if (process.client) {
       try {
@@ -19,7 +17,6 @@ export const useCartStore = defineStore("cart", () => {
     }
   };
 
-  // ✅ Auto-persist changes (client-only)
   if (process.client) {
     watch(
       cart,
@@ -54,6 +51,6 @@ export const useCartStore = defineStore("cart", () => {
     removeFromCart,
     isInCart,
     clearCart,
-    loadCart, // ✅ expose loadCart
+    loadCart,
   };
 });

@@ -13,7 +13,7 @@ export interface Course {
   professor: string;
   createdAt: string;
   enrolledUsers?: number;
-  enrolled?: boolean; // flag to indicate enrollment
+  enrolled?: boolean;
 }
 
 export const useCourseStore = defineStore("course", () => {
@@ -24,28 +24,23 @@ export const useCourseStore = defineStore("course", () => {
 
   const toggleNewCourse = () => {
     newCourse.value = !newCourse.value;
-    editingCourseId.value = null; // reset editing when adding new
+    editingCourseId.value = null;
   };
 
   const startEditCourse = (id: string) => {
     editingCourseId.value = id;
-    newCourse.value = false; // reset add mode when editing
+    newCourse.value = false;
   };
 
-  // ✅ FIX: close editing modal
   const closeEditCourse = () => {
     editingCourseId.value = null;
     newCourse.value = false;
   };
 
-  // --------------------------
-  // Load enrolled courses from localStorage
-  // --------------------------
   if (typeof window !== "undefined") {
     const saved = localStorage.getItem("enrolledCourses");
     if (saved) enrolledCourses.value = JSON.parse(saved);
 
-    // Save any changes to localStorage automatically
     watch(
       enrolledCourses,
       (val) => localStorage.setItem("enrolledCourses", JSON.stringify(val)),
@@ -53,9 +48,6 @@ export const useCourseStore = defineStore("course", () => {
     );
   }
 
-  // --------------------------
-  // Merge enrolled state
-  // --------------------------
   const mergeEnrolledState = () => {
     enrolledCourses.value.forEach((enrolled) => {
       const found = courses.value.find((c) => c.id === enrolled.id);
@@ -63,9 +55,6 @@ export const useCourseStore = defineStore("course", () => {
     });
   };
 
-  // --------------------------
-  // CRUD
-  // --------------------------
   const fetchCourses = async () => {
     const data = await $fetch<Course[]>("/api/courses");
     courses.value = data;
@@ -100,9 +89,6 @@ export const useCourseStore = defineStore("course", () => {
     enrolledCourses.value = enrolledCourses.value.filter((c) => c.id !== id);
   };
 
-  // --------------------------
-  // Enrollment
-  // --------------------------
   const enrollCourse = (course: Course) => {
     if (!isEnrolled(course.id)) {
       enrolledCourses.value.push(course);
@@ -129,6 +115,6 @@ export const useCourseStore = defineStore("course", () => {
     editingCourseId,
     toggleNewCourse,
     startEditCourse,
-    closeEditCourse, 
+    closeEditCourse,
   };
 });

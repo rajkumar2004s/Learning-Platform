@@ -8,11 +8,10 @@ const USERS_FILE = path.resolve("data/auth.json");
 export default defineEventHandler(async (event) => {
   const body = await readBody<{ email: string; password: string }>(event);
 
-  // Validate input
   if (!body.email || !body.password) {
     throw createError({
       statusCode: 400,
-      message: "Email and password are required"
+      message: "Email and password are required",
     });
   }
 
@@ -30,7 +29,7 @@ export default defineEventHandler(async (event) => {
     console.error("Error parsing users file:", error);
     throw createError({
       statusCode: 500,
-      message: "Internal server error"
+      message: "Internal server error",
     });
   }
 
@@ -39,7 +38,7 @@ export default defineEventHandler(async (event) => {
     console.log(`Login attempt for non-existent user: ${body.email}`);
     throw createError({
       statusCode: 401,
-      message: "Invalid email or password"
+      message: "Invalid email or password",
     });
   }
 
@@ -47,20 +46,18 @@ export default defineEventHandler(async (event) => {
     console.error(`User ${body.email} has no password set`);
     throw createError({
       statusCode: 500,
-      message: "Account configuration error"
+      message: "Account configuration error",
     });
   }
 
-  // Compare plain text passwords directly (insecure)
   if (body.password !== user.password) {
     console.log(`Invalid password for user: ${body.email}`);
     throw createError({
       statusCode: 401,
-      message: "Invalid email or password"
+      message: "Invalid email or password",
     });
   }
 
-  // return safe user
   const safeUser: User = {
     id: user.id,
     name: user.name,

@@ -11,7 +11,6 @@
         Explore the world of knowledge
       </p>
 
-      <!-- Register Form -->
       <div class="pt-8 flex flex-col gap-2 w-[80%]">
         <label class="text-white">Full Name</label>
         <input placeholder="Enter your full name" v-model="registerForm.name" />
@@ -36,10 +35,8 @@
         </div>
       </div>
 
-      <!-- Error -->
       <p class="text-red-500 text-center pt-2" v-if="error">{{ error }}</p>
 
-      <!-- Button -->
       <button
         class="active-glow shiny-btn text-white bg-[#2f76e8] font-[Roboto] mt-6 p-2 w-[80%] rounded-md"
         @click="handleRegister"
@@ -55,6 +52,7 @@
 </template>
 
 <script setup lang="ts">
+// @ts-ignore
 import { ref } from "vue";
 import { useAuthStore } from "../stores/auth";
 
@@ -77,7 +75,11 @@ const loading = ref(false);
 const error = ref("");
 
 const handleRegister = async () => {
-  if (!registerForm.value.name.trim() || !registerForm.value.email.trim() || !registerForm.value.password.trim()) {
+  if (
+    !registerForm.value.name.trim() ||
+    !registerForm.value.email.trim() ||
+    !registerForm.value.password.trim()
+  ) {
     error.value = "Please fill in all fields";
     return;
   }

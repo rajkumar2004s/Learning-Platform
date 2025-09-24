@@ -49,7 +49,7 @@ const props = defineProps({
   },
   color: {
     type: String,
-    default: "#3b82f6", // blue-500
+    default: "#3b82f6",
   },
 });
 
@@ -67,7 +67,7 @@ export default {};
 
 <style scoped>
 .background {
-  stroke: #e5e7eb; /* Tailwind gray-200 */
+  stroke: #e5e7eb;
 }
 .progress {
   transition: stroke-dashoffset 0.5s ease;
